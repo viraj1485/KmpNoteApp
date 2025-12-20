@@ -1,35 +1,30 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+📝 KMP Notes Application
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+A Kotlin Multiplatform Notes Application built using Jetpack Compose and shared business logic, targeting Android and iOS.
+The app allows users to create, view, and manage notes containing plain text, HTML content, and PDF links with a clean, modern UI.
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
 
-### Build and Run Android Application
+📚 Libraries Used
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+1) Room Database
+2) Type safe navigation
+3) Serializable Plugin and Ksp Plugin
 
-### Build and Run iOS Application
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+Walk-through Includes:
 
----
+1) App launch
+2) Creating a note
+3) Viewing HTML content
+4) Clicking links
+5) Opening PDF
+6) Cross-platform behavior
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+1) Android Output
+
+https://github.com/user-attachments/assets/beb94cf5-a17f-429d-8190-d68a04e7588f
+
+2) Ios Output
+
+https://github.com/user-attachments/assets/3108b4b5-458a-41a0-8099-4e6e2ea09155
+
