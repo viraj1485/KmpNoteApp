@@ -11,7 +11,7 @@ import platform.Foundation.NSFileManager
 import platform.Foundation.NSUserDomainMask
 
 
-fun getPeopleDatabase(): NoteDatabase {
+fun getNoteDatabase(): NoteDatabase {
     val dbFilePath = documentDirectory() + "/notedatabase.db"
     return Room.databaseBuilder<NoteDatabase>(
         name = dbFilePath,

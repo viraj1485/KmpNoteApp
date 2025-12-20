@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 
-fun getPeopleDatabase(context: Context): NoteDatabase {
+fun getNoteDatabase(context: Context): NoteDatabase {
     val dbFile = context.getDatabasePath("NoteDatabase.db")
     return Room.databaseBuilder<NoteDatabase>(
         context = context.applicationContext,

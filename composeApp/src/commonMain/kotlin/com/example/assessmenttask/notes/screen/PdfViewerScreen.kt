@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -26,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import assessmenttask.composeapp.generated.resources.Res
 import assessmenttask.composeapp.generated.resources.ic_keyboard
 import assessmenttask.composeapp.generated.resources.pdf_view
-import assessmenttask.composeapp.generated.resources.webview_note
 import org.example.project.commonwebview.pdfViewerWebView
 import org.example.project.notes.resources.backgroundColor
 import org.example.project.notes.resources.iconBackGroundColor
