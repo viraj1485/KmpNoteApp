@@ -2,6 +2,9 @@ package org.example.project.notes.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.assessmenttask.snackbarsetup.SnackbarAction
+import com.example.assessmenttask.snackbarsetup.SnackbarController
+import com.example.assessmenttask.snackbarsetup.SnackbarEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,11 +38,13 @@ class NoteViewModel(
             }
 
             is AddNoteScreenEvent.OnEditClick -> {
-                if (_addNoteScreenState.value.title.isNotEmpty() && _addNoteScreenState.value.subtitle.isNotEmpty()){
+                if (_addNoteScreenState.value.title.isNotEmpty() && _addNoteScreenState.value.subtitle.isNotEmpty()) {
                     println("note edited")
-                    updateNote( event.id,_addNoteScreenState.value.title,
+                    updateNote(
+                        event.id, _addNoteScreenState.value.title,
                         _addNoteScreenState.value.subtitle,
-                        _addNoteScreenState.value.date)
+                        _addNoteScreenState.value.date
+                    )
                 }
             }
 
@@ -47,7 +52,11 @@ class NoteViewModel(
                 if (_addNoteScreenState.value.title.isNotEmpty() &&
                     _addNoteScreenState.value.subtitle.isNotEmpty()
                 ) {
-                    saveNote(_addNoteScreenState.value.title, _addNoteScreenState.value.subtitle,_addNoteScreenState.value.date)
+                    saveNote(
+                        _addNoteScreenState.value.title,
+                        _addNoteScreenState.value.subtitle,
+                        _addNoteScreenState.value.date
+                    )
                 }
             }
 
@@ -72,7 +81,7 @@ class NoteViewModel(
             }
 
 
-            is AddNoteScreenEvent.OnDateSelected ->{
+            is AddNoteScreenEvent.OnDateSelected -> {
                 println("dsgndslfg ${event.date}")
                 _addNoteScreenState.update {
                     it.copy(
@@ -91,6 +100,7 @@ class NoteViewModel(
             _addNoteScreenState.update {
                 AddNoteScreenState()
             }
+            showSnackbar()
         }
     }
 
@@ -98,9 +108,10 @@ class NoteViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val note = notes.value.firstOrNull { it.id == id }
             note?.let { note ->
-                noteDao    .deleteNote(
+                noteDao.deleteNote(
                     note
                 )
+                showSnackbar("Note Deleted")
             } ?: run { return@launch }
         }
     }
@@ -108,7 +119,7 @@ class NoteViewModel(
     fun getNote(noteId: Int?) {
         viewModelScope.launch {
             val note = notes.value.firstOrNull { it.id == noteId }
-            note?.let { note->
+            note?.let { note ->
                 _addNoteScreenState.update {
                     it.copy(
                         title = note.title,
@@ -120,23 +131,35 @@ class NoteViewModel(
         }
     }
 
-    private fun updateNote(id:Int,title:String,subtitle:String,date:String){
+    private fun updateNote(id: Int, title: String, subtitle: String, date: String) {
         viewModelScope.launch {
             noteDao.updateNoteById(
-                    id =id ,
-                    title = title,
-                    subtitle = subtitle,
-                    date = date
+                id = id,
+                title = title,
+                subtitle = subtitle,
+                date = date
             )
             _addNoteScreenState.update {
                 AddNoteScreenState()
             }
+            showSnackbar("Note Updated")
         }
     }
 
     fun clearState() {
         _addNoteScreenState.update {
             AddNoteScreenState()
+        }
+    }
+
+    fun showSnackbar(msg: String = "Note saved successfully") {
+        viewModelScope.launch {
+            SnackbarController.sendEvent(
+                event = SnackbarEvent(
+                    message = msg,
+                    action = null
+                )
+            )
         }
     }
 

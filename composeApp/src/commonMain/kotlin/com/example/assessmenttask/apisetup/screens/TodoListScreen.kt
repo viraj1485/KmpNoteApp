@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,6 +40,9 @@ import assessmenttask.composeapp.generated.resources.Res
 import assessmenttask.composeapp.generated.resources.ic_keyboard
 import com.example.assessmenttask.apisetup.data.TodoResponseItem
 import com.example.assessmenttask.apisetup.viewmodel.MainViewModel
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import org.example.project.notes.resources.backgroundColor
 import org.example.project.notes.resources.cardBackGroundColor
 import org.example.project.notes.resources.cardBorderColor
@@ -45,12 +51,32 @@ import org.example.project.notes.resources.textColor
 import org.jetbrains.compose.resources.painterResource
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, FlowPreview::class)
 @Composable
 fun TodoListScreen(
     viewModel: MainViewModel,
 ) {
+    val scroll_position by viewModel.scroll_position.collectAsStateWithLifecycle()
+    val lazyListState = rememberLazyListState(
+        initialFirstVisibleItemIndex = scroll_position
+    )
     val todos by viewModel.todoList.collectAsStateWithLifecycle()
+    LaunchedEffect(scroll_position) {
+        if (lazyListState.firstVisibleItemIndex != scroll_position) {
+            lazyListState.scrollToItem(scroll_position)
+        }
+    }
+
+
+    LaunchedEffect(lazyListState) {
+        snapshotFlow {
+            lazyListState.firstVisibleItemIndex
+        }.debounce(500L).collectLatest {
+            viewModel.updatePosition(it)
+        }
+    }
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize().background(
             backgroundColor
@@ -84,6 +110,7 @@ fun TodoListScreen(
         },
     ) { innerPadding ->
         LazyColumn(
+            state = lazyListState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(10.dp),
