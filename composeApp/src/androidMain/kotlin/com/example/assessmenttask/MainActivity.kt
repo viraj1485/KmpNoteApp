@@ -13,14 +13,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        val dao = getNoteDatabase(applicationContext).getNoteDao()
-
         setContent {
             val activityContext = LocalContext.current // This IS an Activity Context!
             CompositionLocalProvider(LocalPlatformContext provides activityContext) {
-                App(dao)
+                App()
             }
-
         }
     }
 }

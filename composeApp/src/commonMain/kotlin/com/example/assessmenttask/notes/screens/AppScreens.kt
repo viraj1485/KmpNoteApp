@@ -6,6 +6,9 @@ import kotlinx.serialization.Serializable
 sealed interface AppScreens {
 
     @Serializable
+    data object TodoListScreen : AppScreens
+
+    @Serializable
     data object NoteListScreen : AppScreens
 
     @Serializable
@@ -20,5 +23,8 @@ sealed interface AppScreens {
 
     @Serializable
     data object PDfViewerScreen : AppScreens
+
+    @Serializable
+    data object PermissionScreen : AppScreens
 
 }
